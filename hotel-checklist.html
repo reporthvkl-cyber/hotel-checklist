@@ -326,6 +326,7 @@ window.openRoom = function(room){
   document.getElementById('overlay').classList.add('open');
 };
 
+
 function renderModalChecks(){
   document.getElementById('modal-checks').innerHTML = CHECKS.map(c=>{
     const v = modalState.checks[c];
@@ -334,40 +335,67 @@ function renderModalChecks(){
       const isVid = m.type&&m.type.startsWith('video');
       return `<div class="media-thumb">${isVid?`<video src="${m.data}" muted></video>`:`<img src="${m.data}">`}<button class="media-del" onclick="removeMedia('${c}',${i})">✕</button></div>`;
     }).join('');
-    return `<div class="check-item">
+    return `<div class="check-item" id="check-item-${c}">
       <div class="check-header">
         <span class="check-name">${ICONS[c]} ${c}</span>
-        <div class="toggle-grp">
+        <div class="toggle-grp" id="toggle-grp-${c}">
           <button class="tbtn${v==='ok'?' ok-on':''}" onclick="setCheck('${c}','ok')">✓ ปกติ</button>
           <button class="tbtn${v==='bad'?' bad-on':''}" onclick="setCheck('${c}','bad')">✕ มีปัญหา</button>
         </div>
       </div>
-      ${isBad?`<textarea class="desc-box" rows="2" id="desc-${c}" placeholder="อธิบายปัญหา...">${modalState.checks[c+'_desc']||''}</textarea>`:''}
-      ${isBad?`<div class="media-row" id="media-row-${c}">${mediaItems}<label class="upload-btn"><svg width="20" height="20" fill="none" stroke="currentColor" stroke-width="1.8" viewBox="0 0 24 24"><path d="M23 19a2 2 0 0 1-2 2H3a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h4l2-3h6l2 3h4a2 2 0 0 1 2 2z"/><circle cx="12" cy="13" r="4"/></svg><span>รูป/วิดีโอ</span><input type="file" accept="image/*,video/*" style="display:none" onchange="addMedia('${c}',this)"></label></div>`:''}
+      <div id="desc-area-${c}">
+        ${isBad?`<textarea class="desc-box" rows="2" id="desc-${c}" placeholder="อธิบายปัญหา...">${modalState.checks[c+'_desc']||''}</textarea>`:''}
+        ${isBad?`<div class="media-row" id="media-row-${c}">${mediaItems}<label class="upload-btn"><svg width="20" height="20" fill="none" stroke="currentColor" stroke-width="1.8" viewBox="0 0 24 24"><path d="M23 19a2 2 0 0 1-2 2H3a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h4l2-3h6l2 3h4a2 2 0 0 1 2 2z"/><circle cx="12" cy="13" r="4"/></svg><span>รูป/วิดีโอ</span><input type="file" accept="image/*,video/*" style="display:none" onchange="addMedia('${c}',this)"></label></div>`:''}
+      </div>
     </div>`;
   }).join('');
 }
 
+// Update only buttons and desc area for one check item — does NOT touch other items
+function updateCheckItem(c){
+  const v = modalState.checks[c];
+  const isBad = v==='bad';
+
+  // Update buttons only
+  const grp = document.getElementById('toggle-grp-'+c);
+  if(grp){
+    grp.innerHTML = `<button class="tbtn${v==='ok'?' ok-on':''}" onclick="setCheck('${c}','ok')">✓ ปกติ</button>
+      <button class="tbtn${v==='bad'?' bad-on':''}" onclick="setCheck('${c}','bad')">✕ มีปัญหา</button>`;
+  }
+
+  // Update desc+media area only
+  const area = document.getElementById('desc-area-'+c);
+  if(area){
+    const mediaItems = (modalMedia[c]||[]).map((m,i)=>{
+      const isVid = m.type&&m.type.startsWith('video');
+      return `<div class="media-thumb">${isVid?`<video src="${m.data}" muted></video>`:`<img src="${m.data}">`}<button class="media-del" onclick="removeMedia('${c}',${i})">✕</button></div>`;
+    }).join('');
+    area.innerHTML = isBad
+      ? `<textarea class="desc-box" rows="2" id="desc-${c}" placeholder="อธิบายปัญหา...">${modalState.checks[c+'_desc']||''}</textarea>
+         <div class="media-row" id="media-row-${c}">${mediaItems}<label class="upload-btn"><svg width="20" height="20" fill="none" stroke="currentColor" stroke-width="1.8" viewBox="0 0 24 24"><path d="M23 19a2 2 0 0 1-2 2H3a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h4l2-3h6l2 3h4a2 2 0 0 1 2 2z"/><circle cx="12" cy="13" r="4"/></svg><span>รูป/วิดีโอ</span><input type="file" accept="image/*,video/*" style="display:none" onchange="addMedia('${c}',this)"></label></div>`
+      : '';
+  }
+}
+
 window.setCheck = function(c,v){
-  // Save all current desc values before re-render
-  CHECKS.forEach(ck=>{
-    const el = document.getElementById('desc-'+ck);
-    if(el) modalState.checks[ck+'_desc'] = el.value;
-  });
-  if(modalState.checks[c]===v){delete modalState.checks[c];delete modalState.checks[c+'_desc'];}
-  else{modalState.checks[c]=v;}
-  renderModalChecks();
+  if(modalState.checks[c]===v){
+    delete modalState.checks[c];
+    delete modalState.checks[c+'_desc'];
+  } else {
+    // Save existing desc for this item if switching from bad
+    const el = document.getElementById('desc-'+c);
+    if(el) modalState.checks[c+'_desc'] = el.value;
+    modalState.checks[c] = v;
+  }
+  updateCheckItem(c);
   if(v==='bad'){setTimeout(()=>{const el=document.getElementById('desc-'+c);if(el)el.focus();},50);}
 };
 
 window.removeMedia = function(c,i){
-  // Save all current desc values before re-render
-  CHECKS.forEach(ck=>{
-    const el = document.getElementById('desc-'+ck);
-    if(el) modalState.checks[ck+'_desc'] = el.value;
-  });
+  const el = document.getElementById('desc-'+c);
+  if(el) modalState.checks[c+'_desc'] = el.value;
   modalMedia[c].splice(i,1);
-  renderModalChecks();
+  updateCheckItem(c);
 };
 
 window.addMedia = function(c,input){
