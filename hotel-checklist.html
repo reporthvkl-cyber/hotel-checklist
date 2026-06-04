@@ -68,6 +68,10 @@ body{font-family:'Sarabun',sans-serif;background:#f5f5f0;color:#1a1a1a;min-heigh
 .media-del{position:absolute;top:2px;right:2px;width:18px;height:18px;border-radius:50%;background:rgba(0,0,0,.6);color:#fff;border:none;cursor:pointer;font-size:11px;display:flex;align-items:center;justify-content:center;line-height:1}
 .upload-btn{width:64px;height:64px;border-radius:8px;border:1px dashed #ccc;background:#fafafa;cursor:pointer;display:flex;flex-direction:column;align-items:center;justify-content:center;color:#aaa;gap:2px;flex-shrink:0}
 .upload-btn span{font-size:10px}
+.checker-btns{display:flex;gap:6px;flex-wrap:wrap;margin-bottom:10px}
+.checker-btn{padding:7px 16px;border-radius:20px;border:1px solid #ddd;background:#fff;font-size:13px;cursor:pointer;font-family:'Sarabun',sans-serif;color:#666;transition:all .15s}
+.checker-btn:hover{border-color:#aaa}
+.checker-btn.selected{background:#0F6E56;color:#fff;border-color:#0F6E56}
 .modal-actions{display:flex;gap:8px;margin-top:1rem;justify-content:flex-end}
 .btn-save{padding:9px 20px;background:#1D9E75;color:#fff;border:none;border-radius:8px;font-size:14px;cursor:pointer;font-family:'Sarabun',sans-serif;font-weight:500}
 .btn-cancel{padding:9px 16px;background:transparent;color:#888;border:1px solid #ddd;border-radius:8px;font-size:14px;cursor:pointer;font-family:'Sarabun',sans-serif}
@@ -146,8 +150,11 @@ body{font-family:'Sarabun',sans-serif;background:#f5f5f0;color:#1a1a1a;min-heigh
 <div class="overlay" id="overlay" onclick="overlayClick(event)">
   <div class="modal" onclick="event.stopPropagation()">
     <div class="modal-title" id="modal-title">ห้อง XXXX</div>
-    <label class="form-label">ชื่อผู้ตรวจ</label>
-    <input class="form-input" id="modal-checker" placeholder="ใส่ชื่อผู้ตรวจ..." autocomplete="off">
+    <label class="form-label">ผู้ตรวจ</label>
+    <div class="checker-btns" id="checker-btns">
+      <button class="checker-btn" onclick="toggleChecker('Toy')">Toy</button>
+      <button class="checker-btn" onclick="toggleChecker('James')">James</button>
+    </div>
     <div id="modal-checks"></div>
     <label class="form-label" style="margin-top:10px">หมายเหตุทั่วไป</label>
     <textarea class="form-input" id="modal-note" rows="2" placeholder="หมายเหตุเพิ่มเติม..."></textarea>
@@ -285,6 +292,24 @@ function renderRooms(){
   document.getElementById('rooms-container').innerHTML = html;
 }
 
+const CHECKERS = ['Toy', 'James'];
+let selectedCheckers = [];
+
+window.toggleChecker = function(name){
+  if(selectedCheckers.includes(name)){
+    selectedCheckers = selectedCheckers.filter(c=>c!==name);
+  } else {
+    selectedCheckers.push(name);
+  }
+  renderCheckerBtns();
+};
+
+function renderCheckerBtns(){
+  document.querySelectorAll('.checker-btn').forEach(btn=>{
+    btn.classList.toggle('selected', selectedCheckers.includes(btn.textContent.trim()));
+  });
+}
+
 window.openRoom = function(room){
   modalRoom = room;
   const d = data[room]||{checks:{},note:'',checker:''};
@@ -292,7 +317,10 @@ window.openRoom = function(room){
   modalMedia = {};
   CHECKS.forEach(c=>{modalMedia[c]=[...(d.media&&d.media[c]?d.media[c]:[])];});
   document.getElementById('modal-title').textContent = `ห้อง ${room}`;
-  document.getElementById('modal-checker').value = modalState.checker;
+  // restore selected checkers from saved data
+  const saved = d.checker||'';
+  selectedCheckers = saved ? saved.split(',').map(s=>s.trim()).filter(s=>CHECKERS.includes(s)) : [];
+  renderCheckerBtns();
   document.getElementById('modal-note').value = modalState.note;
   renderModalChecks();
   document.getElementById('overlay').classList.add('open');
@@ -350,7 +378,7 @@ window.saveRoom = async function(){
     const el = document.getElementById('desc-'+c);
     if(el) modalState.checks[c+'_desc'] = el.value;
   });
-  const checker = document.getElementById('modal-checker').value.trim();
+  const checker = selectedCheckers.join(', ');
   const note = document.getElementById('modal-note').value.trim();
   const ts = Date.now();
   const entry = {checks:{...modalState.checks},checker,note,media:{},ts,
