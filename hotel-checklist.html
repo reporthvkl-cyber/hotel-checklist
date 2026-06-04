@@ -349,6 +349,11 @@ function renderModalChecks(){
 }
 
 window.setCheck = function(c,v){
+  // Save all current desc values before re-render
+  CHECKS.forEach(ck=>{
+    const el = document.getElementById('desc-'+ck);
+    if(el) modalState.checks[ck+'_desc'] = el.value;
+  });
   if(modalState.checks[c]===v){delete modalState.checks[c];delete modalState.checks[c+'_desc'];}
   else{modalState.checks[c]=v;}
   renderModalChecks();
@@ -356,6 +361,11 @@ window.setCheck = function(c,v){
 };
 
 window.removeMedia = function(c,i){
+  // Save all current desc values before re-render
+  CHECKS.forEach(ck=>{
+    const el = document.getElementById('desc-'+ck);
+    if(el) modalState.checks[ck+'_desc'] = el.value;
+  });
   modalMedia[c].splice(i,1);
   renderModalChecks();
 };
