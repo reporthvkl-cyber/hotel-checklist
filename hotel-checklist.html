@@ -68,6 +68,7 @@ body{font-family:'Sarabun',sans-serif;background:#f5f5f0;color:#1a1a1a;min-heigh
 .media-del{position:absolute;top:2px;right:2px;width:18px;height:18px;border-radius:50%;background:rgba(0,0,0,.6);color:#fff;border:none;cursor:pointer;font-size:11px;display:flex;align-items:center;justify-content:center;line-height:1}
 .upload-btn{width:64px;height:64px;border-radius:8px;border:1px dashed #ccc;background:#fafafa;cursor:pointer;display:flex;flex-direction:column;align-items:center;justify-content:center;color:#aaa;gap:2px;flex-shrink:0}
 .upload-btn span{font-size:10px}
+.camera-btn{border-color:#5DCAA5;color:#0F6E56;background:#f0faf6}
 .checker-btns{display:flex;gap:6px;flex-wrap:wrap;margin-bottom:10px}
 .checker-btn{padding:7px 16px;border-radius:20px;border:1px solid #ddd;background:#fff;font-size:13px;cursor:pointer;font-family:'Sarabun',sans-serif;color:#666;transition:all .15s}
 .checker-btn:hover{border-color:#aaa}
@@ -327,6 +328,28 @@ window.openRoom = function(room){
 };
 
 
+
+function mediaRowHtml(c, mediaItems){
+  return `<div class="media-row" id="media-row-${c}">
+    ${mediaItems}
+    <label class="upload-btn" title="เลือกรูป/วิดีโอจากคลัง">
+      <svg width="20" height="20" fill="none" stroke="currentColor" stroke-width="1.8" viewBox="0 0 24 24"><path d="M23 19a2 2 0 0 1-2 2H3a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h4l2-3h6l2 3h4a2 2 0 0 1 2 2z"/><circle cx="12" cy="13" r="4"/></svg>
+      <span>คลัง</span>
+      <input type="file" accept="image/*,video/*" style="display:none" onchange="addMedia('${c}',this)">
+    </label>
+    <label class="upload-btn camera-btn" title="ถ่ายรูป">
+      <svg width="20" height="20" fill="none" stroke="currentColor" stroke-width="1.8" viewBox="0 0 24 24"><path d="M23 19a2 2 0 0 1-2 2H3a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h4l2-3h6l2 3h4a2 2 0 0 1 2 2z"/><circle cx="12" cy="13" r="4"/></svg>
+      <span>ถ่ายรูป</span>
+      <input type="file" accept="image/*" capture="environment" style="display:none" onchange="addMedia('${c}',this)">
+    </label>
+    <label class="upload-btn camera-btn" title="ถ่ายวิดีโอ">
+      <svg width="20" height="20" fill="none" stroke="currentColor" stroke-width="1.8" viewBox="0 0 24 24"><rect x="2" y="7" width="15" height="10" rx="2"/><path d="M17 9l5-2v10l-5-2"/></svg>
+      <span>ถ่ายวิดีโอ</span>
+      <input type="file" accept="video/*" capture="environment" style="display:none" onchange="addMedia('${c}',this)">
+    </label>
+  </div>`;
+}
+
 function renderModalChecks(){
   document.getElementById('modal-checks').innerHTML = CHECKS.map(c=>{
     const v = modalState.checks[c];
@@ -345,7 +368,7 @@ function renderModalChecks(){
       </div>
       <div id="desc-area-${c}">
         ${isBad?`<textarea class="desc-box" rows="2" id="desc-${c}" placeholder="อธิบายปัญหา...">${modalState.checks[c+'_desc']||''}</textarea>`:''}
-        ${isBad?`<div class="media-row" id="media-row-${c}">${mediaItems}<label class="upload-btn"><svg width="20" height="20" fill="none" stroke="currentColor" stroke-width="1.8" viewBox="0 0 24 24"><path d="M23 19a2 2 0 0 1-2 2H3a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h4l2-3h6l2 3h4a2 2 0 0 1 2 2z"/><circle cx="12" cy="13" r="4"/></svg><span>รูป/วิดีโอ</span><input type="file" accept="image/*,video/*" style="display:none" onchange="addMedia('${c}',this)"></label></div>`:''}
+        ${isBad?mediaRowHtml(c, mediaItems):''}
       </div>
     </div>`;
   }).join('');
@@ -372,7 +395,7 @@ function updateCheckItem(c){
     }).join('');
     area.innerHTML = isBad
       ? `<textarea class="desc-box" rows="2" id="desc-${c}" placeholder="อธิบายปัญหา...">${modalState.checks[c+'_desc']||''}</textarea>
-         <div class="media-row" id="media-row-${c}">${mediaItems}<label class="upload-btn"><svg width="20" height="20" fill="none" stroke="currentColor" stroke-width="1.8" viewBox="0 0 24 24"><path d="M23 19a2 2 0 0 1-2 2H3a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h4l2-3h6l2 3h4a2 2 0 0 1 2 2z"/><circle cx="12" cy="13" r="4"/></svg><span>รูป/วิดีโอ</span><input type="file" accept="image/*,video/*" style="display:none" onchange="addMedia('${c}',this)"></label></div>`
+         ${mediaRowHtml(c, mediaItems)}`
       : '';
   }
 }
