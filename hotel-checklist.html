@@ -135,6 +135,7 @@ body{font-family:'Sarabun',sans-serif;background:#f5f5f0;color:#1a1a1a;min-heigh
         <option value="complete">ผ่านครบ</option>
         <option value="partial">มีปัญหา</option>
       </select>
+      <button class="btn-sm" onclick="exportExcel()" style="background:#1D9E75;color:#fff;border-color:#1D9E75;font-weight:500">📊 Export Excel</button>
       <button class="btn-sm" onclick="clearHistory()">🗑 ล้างประวัติ</button>
     </div>
     <div id="history-list"><div class="spinner">กำลังโหลด...</div></div>
@@ -414,11 +415,62 @@ window.clearHistory = async function(){
   await remove(ref(db,'hotel_history'));
 };
 
+window.exportExcel = function(){
+  const bf = document.getElementById('hf-bldg').value;
+  const sf = document.getElementById('hf-status').value;
+  let h = history;
+  if(bf) h = h.filter(x=>x.bldg===bf);
+  if(sf) h = h.filter(x=>x.status===sf);
+  if(!h.length){ alert('ไม่มีข้อมูลสำหรับ Export'); return; }
+
+  // Build rows
+  const rows = [['วันที่/เวลา','ตึก','ห้อง','ผู้ตรวจ','ประตู','ปัญหาประตู','ตู้เซฟ','ปัญหาตู้เซฟ','TV','ปัญหา TV','สาย LAN','ปัญหาสาย LAN','หมายเหตุ','สถานะรวม']];
+  h.forEach(e=>{
+    rows.push([
+      e.time||'',
+      'ตึก '+e.bldg,
+      e.room||'',
+      e.checker||'',
+      e.checks['ประตู']==='ok'?'ปกติ': e.checks['ประตู']==='bad'?'มีปัญหา':'-',
+      e.checks['ประตู_desc']||'',
+      e.checks['ตู้เซฟ']==='ok'?'ปกติ': e.checks['ตู้เซฟ']==='bad'?'มีปัญหา':'-',
+      e.checks['ตู้เซฟ_desc']||'',
+      e.checks['TV']==='ok'?'ปกติ': e.checks['TV']==='bad'?'มีปัญหา':'-',
+      e.checks['TV_desc']||'',
+      e.checks['สาย LAN']==='ok'?'ปกติ': e.checks['สาย LAN']==='bad'?'มีปัญหา':'-',
+      e.checks['สาย LAN_desc']||'',
+      e.note||'',
+      e.status==='complete'?'ผ่านครบ':'มีปัญหา'
+    ]);
+  });
+
+  // Create workbook using SheetJS
+  const XLSX = window.XLSX;
+  const ws = XLSX.utils.aoa_to_sheet(rows);
+
+  // Column widths
+  ws['!cols'] = [
+    {wch:18},{wch:8},{wch:8},{wch:14},
+    {wch:10},{wch:20},{wch:10},{wch:20},
+    {wch:10},{wch:20},{wch:10},{wch:20},
+    {wch:24},{wch:12}
+  ];
+
+  const wb = XLSX.utils.book_new();
+  XLSX.utils.book_append_sheet(wb, ws, 'รายงานตรวจห้อง');
+
+  const bldgLabel = bf ? `_ตึก${bf}` : '_ทุกตึก';
+  const statusLabel = sf==='complete'?'_ผ่านครบ': sf==='partial'?'_มีปัญหา':'';
+  const dateStr = new Date().toLocaleDateString('th-TH').replace(/\//g,'-');
+  XLSX.writeFile(wb, `hotel-checklist${bldgLabel}${statusLabel}_${dateStr}.xlsx`);
+};
+
 window.setBldg = setBldg;
 window.setView = setView;
 
 renderBldgTabs();
 renderSummary();
 </script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js"></script>
 </body>
 </html>
