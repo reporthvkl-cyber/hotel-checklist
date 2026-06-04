@@ -424,12 +424,15 @@ window.removeMedia = function(c,i){
 window.addMedia = function(c,input){
   const file = input.files[0];
   if(!file) return;
+  if(!modalMedia[c]) modalMedia[c]=[];
+  if(modalMedia[c].length >= 3){alert('ใส่ได้สูงสุด 3 ไฟล์ต่อรายการครับ');input.value='';return;}
   if(file.size > 5*1024*1024){alert('ไฟล์ใหญ่เกิน 5MB');return;}
   const reader = new FileReader();
   reader.onload = e=>{
-    if(!modalMedia[c]) modalMedia[c]=[];
+    const el = document.getElementById('desc-'+c);
+    if(el) modalState.checks[c+'_desc'] = el.value;
     modalMedia[c].push({data:e.target.result,type:file.type,name:file.name});
-    renderModalChecks();
+    updateCheckItem(c);
   };
   reader.readAsDataURL(file);
 };
