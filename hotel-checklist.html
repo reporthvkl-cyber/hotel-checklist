@@ -258,7 +258,8 @@ function renderBldgTabs(){
 }
 
 function renderSummary(){
-  const bldg = BLDGS[activeBldg];
+  const bldg = BLDGS[activeBldg] || BLDGS[String(activeBldg)];
+  if(!bldg) return;
   let total=0,done=0,issues=0;
   Object.values(bldg.floors).forEach(f=>{for(let r=f.from;r<=f.to;r++){total++;const s=getRoomStatus(r);if(s==='complete')done++;else if(s==='partial')issues++;}});
   document.getElementById('summary-row').innerHTML=`
@@ -271,8 +272,8 @@ function renderSummary(){
 function renderRooms(){
   renderBldgTabs();
   renderSummary();
-  document.getElementById('rooms-container').innerHTML = '<div class="spinner">กำลังโหลด...</div>';
-  const bldg = BLDGS[activeBldg];
+  const bldg = BLDGS[activeBldg] || BLDGS[String(activeBldg)];
+  if(!bldg){ document.getElementById('rooms-container').innerHTML=''; return; }
   let html = '';
   Object.entries(bldg.floors).forEach(([floor,f])=>{
     html += `<div class="floor-label">${floor}</div><div class="rooms-grid">`;
