@@ -238,9 +238,7 @@ function setView(v){
 }
 
 function setBldg(b){
-  activeBldg = b;
-  document.querySelectorAll('.btab').forEach(t=>t.classList.remove('active'));
-  document.getElementById('btab-'+b).classList.add('active');
+  activeBldg = +b;
   renderRooms();
 }
 
@@ -273,6 +271,7 @@ function renderSummary(){
 function renderRooms(){
   renderBldgTabs();
   renderSummary();
+  document.getElementById('rooms-container').innerHTML = '<div class="spinner">กำลังโหลด...</div>';
   const bldg = BLDGS[activeBldg];
   let html = '';
   Object.entries(bldg.floors).forEach(([floor,f])=>{
