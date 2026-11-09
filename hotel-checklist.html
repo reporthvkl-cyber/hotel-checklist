@@ -40,6 +40,8 @@ body{font-family:'Sarabun',sans-serif;background:#f5f5f0;color:#1a1a1a;min-heigh
 .dot.ok{background:#1D9E75;border-color:#1D9E75}
 .dot.bad{background:#E24B4A;border-color:#E24B4A}
 .dot-lbl{font-size:10px;color:#aaa}
+.room-tv{font-size:11px;color:#0F6E56;margin-bottom:4px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.tv-sum{font-size:12px;color:#666;background:#fff;border:1px solid #e8e8e2;border-radius:10px;padding:8px 12px;margin-bottom:1rem;line-height:1.7}
 .overlay{display:none;position:fixed;inset:0;background:rgba(0,0,0,.45);z-index:100;align-items:flex-end;justify-content:center}
 .overlay.open{display:flex}
 @media(min-width:500px){.overlay{align-items:center;padding:1rem}}
@@ -105,6 +107,7 @@ body{font-family:'Sarabun',sans-serif;background:#f5f5f0;color:#1a1a1a;min-heigh
   <div id="view-check">
     <div class="bldg-tabs" id="bldg-tabs"></div>
     <div class="summary-row" id="summary-row"></div>
+    <div id="tv-summary"></div>
     <div id="rooms-container"><div class="spinner">กำลังโหลด...</div></div>
   </div>
   <div id="view-history" style="display:none">
@@ -183,6 +186,10 @@ let modalMedia = {};
 let dbData = {};
 let dbHistory = [];
 let selectedCheckers = [];
+let tvSel = '';
+let tvOther = '';
+const TV_MODELS = ['LG 42 นิ้ว','LG Smart TV 43 นิ้ว'];
+const esc = s=>String(s==null?'':s).replace(/[&<>"]/g,ch=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[ch]));
 
 function setSyncStatus(s){
   document.getElementById('sync-dot').className = 'sync-dot '+s;
@@ -243,6 +250,13 @@ function renderRooms(){
     <div class="scard"><div class="scard-label">มีปัญหา</div><div class="scard-val" style="color:#A32D2D">${issues}</div></div>
     <div class="scard"><div class="scard-label">ยังไม่เช็ค</div><div class="scard-val" style="color:#aaa">${total-done-issues}</div></div>`;
 
+  // TV model summary
+  const tvCount = {}; let tvNone = 0;
+  bldg.floors.forEach(f=>{for(let r=f.from;r<=f.to;r++){const m=dbData[r]&&dbData[r].tvModel;if(m)tvCount[m]=(tvCount[m]||0)+1;else tvNone++;}});
+  const tvParts = Object.entries(tvCount).map(([m,n])=>`${esc(m)} <b>${n}</b>`);
+  tvParts.push(`ยังไม่ระบุ <b>${tvNone}</b>`);
+  document.getElementById('tv-summary').innerHTML = `<div class="tv-sum">📺 รุ่น TV (${bldg.name}): ${tvParts.join(' · ')}</div>`;
+
   // Rooms
   let html = '';
   bldg.floors.forEach(f=>{
@@ -251,12 +265,13 @@ function renderRooms(){
       const s = getRoomStatus(r);
       const d = dbData[r];
       const checker = d&&d.checker?`<div class="room-checker">👤 ${d.checker}</div>`:'';
+      const tvLine = d&&d.tvModel?`<div class="room-tv">📺 ${esc(d.tvModel)}</div>`:'';
       const dots = CHECKS.map(c=>{
         const v = d&&d.checks?d.checks[c]:'';
         return `<span class="dot${v==='ok'?' ok':v==='bad'?' bad':''}"></span><span class="dot-lbl">${c}</span>`;
       }).join('');
       html += `<div class="room-card${s==='complete'?' complete':s==='partial'?' partial':''}" onclick="openRoom(${r})">
-        <div class="room-num">${r}</div>${checker}
+        <div class="room-num">${r}</div>${checker}${tvLine}
         <div class="dots-row">${dots}</div>
       </div>`;
     }
@@ -273,6 +288,9 @@ window.openRoom = function(room){
   CHECKS.forEach(c=>{modalMedia[c]=[...(d.media&&d.media[c]?d.media[c]:[])];});
   const saved = d.checker||'';
   selectedCheckers = saved?saved.split(',').map(s=>s.trim()).filter(Boolean):[];
+  const tm = d.tvModel||'';
+  tvSel = TV_MODELS.includes(tm)?tm:(tm?'อื่นๆ':'');
+  tvOther = TV_MODELS.includes(tm)?'':(tm==='อื่นๆ'?'':tm);
   document.getElementById('modal-title').textContent = `ห้อง ${room}`;
   document.getElementById('modal-note').value = modalState.note;
   document.getElementById('cb-Toy').className = 'checker-btn'+(selectedCheckers.includes('Toy')?' selected':'');
@@ -286,6 +304,19 @@ window.toggleChecker = function(name){
   document.getElementById('cb-Toy').className = 'checker-btn'+(selectedCheckers.includes('Toy')?' selected':'');
   document.getElementById('cb-James').className = 'checker-btn'+(selectedCheckers.includes('James')?' selected':'');
 };
+
+function tvModelHtml(){
+  const chips = [...TV_MODELS,'อื่นๆ'].map(m=>`<button class="checker-btn${tvSel===m?' selected':''}" onclick="selectTv('${m}')">${m}</button>`).join('');
+  const other = tvSel==='อื่นๆ'?`<input class="form-input" id="tv-other" placeholder="ระบุรุ่น TV เช่น Samsung 40 นิ้ว..." value="${esc(tvOther)}" oninput="setTvOther(this.value)" style="margin:6px 0 0">`:'';
+  return `<div id="tv-model-area" style="margin-top:8px"><div class="form-label">รุ่น TV ในห้อง</div><div class="checker-btns" style="margin-bottom:0">${chips}</div>${other}</div>`;
+}
+
+window.selectTv = function(m){
+  tvSel = (tvSel===m)?'':m;
+  document.getElementById('tv-model-area').outerHTML = tvModelHtml();
+  if(tvSel==='อื่นๆ') setTimeout(()=>{const el=document.getElementById('tv-other');if(el)el.focus();},50);
+};
+window.setTvOther = function(v){ tvOther = v; };
 
 function mediaRowHtml(c){
   const items = (modalMedia[c]||[]).map((m,i)=>{
@@ -311,6 +342,7 @@ function renderModalChecks(){
           <button class="tbtn${v==='bad'?' bad-on':''}" onclick="setCheck('${c}','bad')">✕ มีปัญหา</button>
         </div>
       </div>
+      ${c==='TV'?tvModelHtml():''}
       <div id="da-${c}">${isBad?`<textarea class="desc-box" rows="2" id="desc-${c}" placeholder="อธิบายปัญหา...">${modalState.checks[c+'_desc']||''}</textarea>${mediaRowHtml(c)}`:''}</div>
     </div>`;
   }).join('');
@@ -355,7 +387,8 @@ window.saveRoom = async function(){
   const checker = selectedCheckers.join(', ');
   const note = document.getElementById('modal-note').value.trim();
   const ts = Date.now();
-  const entry = {checks:{...modalState.checks},checker,note,media:{},ts,
+  const tvModel = tvSel==='อื่นๆ'?(tvOther.trim()||'อื่นๆ'):tvSel;
+  const entry = {checks:{...modalState.checks},checker,note,tvModel,media:{},ts,
     time:new Date().toLocaleString('th-TH',{dateStyle:'short',timeStyle:'short'})};
   CHECKS.forEach(c=>{entry.media[c]=[...(modalMedia[c]||[])];});
   setSyncStatus('loading');
@@ -395,6 +428,7 @@ function renderHistory(){
     return `<div class="hist-card">
       <div class="hist-top"><span class="hist-room">ตึก ${entry.bldg} — ห้อง ${entry.room}</span><span class="hist-time">${entry.time}</span></div>
       ${entry.checker?`<div class="hist-checker">👤 ${entry.checker}</div>`:''}
+      ${entry.tvModel?`<div class="hist-checker">📺 รุ่น TV: ${esc(entry.tvModel)}</div>`:''}
       <div class="hist-tags">${tags||'<span style="font-size:12px;color:#ccc">ยังไม่เช็ครายการ</span>'}</div>
       ${entry.note?`<div class="hist-note">📝 ${entry.note}</div>`:''}
       ${mediaHtml?`<div class="hist-media">${mediaHtml}</div>`:''}
@@ -414,18 +448,18 @@ window.exportExcel = function(){
   if(bf)h=h.filter(x=>x.bldg===bf);
   if(sf)h=h.filter(x=>x.status===sf);
   if(!h.length){alert('ไม่มีข้อมูลสำหรับ Export');return;}
-  const rows=[['วันที่/เวลา','ตึก','ห้อง','ผู้ตรวจ','ประตู','ปัญหาประตู','ตู้เซฟ','ปัญหาตู้เซฟ','TV','ปัญหา TV','สาย LAN','ปัญหาสาย LAN','หมายเหตุ','สถานะรวม']];
+  const rows=[['วันที่/เวลา','ตึก','ห้อง','ผู้ตรวจ','ประตู','ปัญหาประตู','ตู้เซฟ','ปัญหาตู้เซฟ','TV','ปัญหา TV','รุ่น TV','สาย LAN','ปัญหาสาย LAN','หมายเหตุ','สถานะรวม']];
   h.forEach(e=>{rows.push([
     e.time||'','ตึก '+e.bldg,e.room||'',e.checker||'',
     e.checks['ประตู']==='ok'?'ปกติ':e.checks['ประตู']==='bad'?'มีปัญหา':'-',e.checks['ประตู_desc']||'',
     e.checks['ตู้เซฟ']==='ok'?'ปกติ':e.checks['ตู้เซฟ']==='bad'?'มีปัญหา':'-',e.checks['ตู้เซฟ_desc']||'',
-    e.checks['TV']==='ok'?'ปกติ':e.checks['TV']==='bad'?'มีปัญหา':'-',e.checks['TV_desc']||'',
+    e.checks['TV']==='ok'?'ปกติ':e.checks['TV']==='bad'?'มีปัญหา':'-',e.checks['TV_desc']||'',e.tvModel||'',
     e.checks['สาย LAN']==='ok'?'ปกติ':e.checks['สาย LAN']==='bad'?'มีปัญหา':'-',e.checks['สาย LAN_desc']||'',
     e.note||'',e.status==='complete'?'ผ่านครบ':'มีปัญหา'
   ]);});
   const XLSX=window.XLSX;
   const ws=XLSX.utils.aoa_to_sheet(rows);
-  ws['!cols']=[{wch:18},{wch:8},{wch:8},{wch:14},{wch:10},{wch:20},{wch:10},{wch:20},{wch:10},{wch:20},{wch:10},{wch:20},{wch:24},{wch:12}];
+  ws['!cols']=[{wch:18},{wch:8},{wch:8},{wch:14},{wch:10},{wch:20},{wch:10},{wch:20},{wch:10},{wch:20},{wch:22},{wch:10},{wch:20},{wch:24},{wch:12}];
   const wb=XLSX.utils.book_new();
   XLSX.utils.book_append_sheet(wb,ws,'รายงานตรวจห้อง');
   const bf2=bf?`_ตึก${bf}`:'_ทุกตึก';
