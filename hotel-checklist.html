@@ -19,29 +19,58 @@ body{font-family:'Sarabun',sans-serif;background:#f5f5f0;color:#1a1a1a;min-heigh
 .view-btn.active{color:#0F6E56;border-bottom-color:#1D9E75}
 .content{padding:1rem;max-width:700px;margin:0 auto}
 .bldg-tabs{display:flex;gap:6px;flex-wrap:wrap;margin-bottom:1rem}
-.btab{padding:6px 14px;border-radius:20px;border:1px solid #ddd;background:#fff;font-size:13px;cursor:pointer;color:#666;font-family:'Sarabun',sans-serif}
-.btab.active{background:#0F6E56;color:#fff;border-color:#0F6E56}
-.summary-row{display:grid;grid-template-columns:repeat(4,1fr);gap:8px;margin-bottom:1rem}
-.scard{background:#fff;border-radius:10px;padding:10px 12px;border:1px solid #e8e8e2}
-.scard-label{font-size:11px;color:#999;margin-bottom:2px}
-.scard-val{font-size:20px;font-weight:600}
 .floor-label{font-size:11px;color:#999;font-weight:600;text-transform:uppercase;letter-spacing:.05em;margin:.75rem 0 .4rem}
-.rooms-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(130px,1fr));gap:8px;margin-bottom:.5rem}
-.room-card{background:#fff;border:1px solid #e8e8e2;border-radius:10px;padding:10px 12px;cursor:pointer;transition:border-color .15s}
-.room-card:hover{border-color:#aaa}
-.room-card.complete{border-color:#5DCAA5;background:#f0faf6}
-.room-card.partial{border-color:#FAC775;background:#fffbf0}
-.room-num{font-size:14px;font-weight:600;margin-bottom:3px}
-.room-card.complete .room-num{color:#0F6E56}
-.room-card.partial .room-num{color:#854F0B}
-.room-checker{font-size:11px;color:#999;margin-bottom:4px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
-.dots-row{display:flex;gap:4px;align-items:center;flex-wrap:wrap}
-.dot{width:7px;height:7px;border-radius:50%;border:1px solid #ccc;flex-shrink:0}
-.dot.ok{background:#1D9E75;border-color:#1D9E75}
-.dot.bad{background:#E24B4A;border-color:#E24B4A}
-.dot-lbl{font-size:10px;color:#aaa}
-.room-tv{font-size:11px;color:#0F6E56;margin-bottom:4px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
-.tv-sum{font-size:12px;color:#666;background:#fff;border:1px solid #e8e8e2;border-radius:10px;padding:8px 12px;margin-bottom:1rem;line-height:1.7}
+.rooms-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(100px,1fr));gap:8px;margin-bottom:.5rem}
+.btab{padding:6px 14px;border-radius:20px;border:1px solid #ddd;background:#fff;font-size:13px;cursor:pointer;color:#666;font-family:'Sarabun',sans-serif;display:inline-flex;align-items:center;gap:8px}
+.btab.active{background:#0F6E56;color:#fff;border-color:#0F6E56}
+.bd{font-size:11px;background:#FAEEDA;color:#854F0B;padding:1px 8px;border-radius:10px}
+.card{background:#fff;border:1px solid #e8e8e2;border-radius:12px;padding:14px 16px;margin-bottom:12px}
+.grid2{display:grid;grid-template-columns:repeat(auto-fit,minmax(260px,1fr));gap:12px;margin-bottom:12px}
+.grid2>.card{margin-bottom:0}
+.lbl{font-size:12px;color:#888;margin-bottom:10px}
+.metrics{display:grid;grid-template-columns:repeat(auto-fit,minmax(110px,1fr));gap:10px;margin-bottom:12px}
+.metric{background:#fff;border:1px solid #e8e8e2;border-radius:10px;padding:10px 12px}
+.ml{font-size:12px;color:#888;display:flex;align-items:center;gap:6px}
+.md{width:8px;height:8px;border-radius:50%;flex-shrink:0;display:inline-block}
+.mv{font-size:22px;font-weight:600;margin-top:2px}
+.ms{font-size:11px;color:#aaa}
+.pbar{display:flex;height:8px;border-radius:4px;overflow:hidden;background:#f0f0ea;width:100%}
+.pbar.lg{height:12px;border-radius:6px}
+.pbar i{display:block}
+.srow{display:flex;align-items:center;gap:10px;margin-bottom:10px;font-size:13px}
+.srow:last-child{margin-bottom:0}
+.sn{width:56px;flex-shrink:0}
+.sgrow{flex:1}
+.sbar{flex:1;height:8px;border-radius:4px;background:#f0f0ea}
+.sbar i{display:block;height:8px;border-radius:4px;background:#E24B4A}
+.sc{width:44px;text-align:right;flex-shrink:0;font-size:12px;color:#777}
+b.sc{font-size:13px;color:#1a1a1a;font-weight:600}
+.pick{cursor:pointer;padding:4px 6px;margin:0 -6px 6px;border-radius:8px}
+.pick.on{background:#E1F5EE}
+.legend{display:flex;gap:12px;flex-wrap:wrap;font-size:11px;color:#888;margin-top:10px}
+.legend span{display:inline-flex;align-items:center;gap:5px}
+.bhead{display:flex;justify-content:space-between;align-items:center;gap:12px;margin-bottom:12px}
+.bt{font-weight:600;font-size:15px}
+.bs{font-size:11px;color:#aaa}
+.bp{text-align:right}
+.bpv{font-size:24px;font-weight:600}
+.irow{display:flex;align-items:center;gap:10px;padding:8px 0;border-top:1px solid #f0f0ea;font-size:13px;cursor:pointer}
+.lbl+.irow{border-top:none}
+.ichip{font-size:12px;background:#fff5f5;color:#A32D2D;padding:2px 10px;border-radius:8px;white-space:nowrap}
+.idesc{color:#777;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.mut{font-size:13px;color:#aaa}
+.rhead{display:flex;align-items:center;justify-content:space-between;gap:8px;flex-wrap:wrap;margin-bottom:6px}
+.chips{display:flex;gap:6px;flex-wrap:wrap}
+.chip{font-size:12px;padding:4px 12px;border-radius:16px;border:1px solid #ddd;background:#fff;color:#666;cursor:pointer;font-family:'Sarabun',sans-serif}
+.chip.on{background:#E1F5EE;color:#0F6E56;border-color:#5DCAA5}
+.rc{background:#fff;border:1px solid #e8e8e2;border-radius:10px;padding:8px 10px;cursor:pointer}
+.rc:hover{border-color:#aaa}
+.rc-n{font-size:14px;font-weight:600}
+.rc-s{font-size:11px;color:#aaa;margin-top:2px}
+.rc.ok{background:#f0faf6;border-color:#5DCAA5}.rc.ok .rc-n,.rc.ok .rc-s{color:#0F6E56}
+.rc.bad{background:#fffbf0;border-color:#FAC775}.rc.bad .rc-n,.rc.bad .rc-s{color:#854F0B}
+.rc.inc{background:#f3f8fd;border-color:#B5D4F4}.rc.inc .rc-n,.rc.inc .rc-s{color:#185FA5}
+.rc-m{font-size:11px;color:#888;margin-top:2px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
 .overlay{display:none;position:fixed;inset:0;background:rgba(0,0,0,.45);z-index:100;align-items:flex-end;justify-content:center}
 .overlay.open{display:flex}
 @media(min-width:500px){.overlay{align-items:center;padding:1rem}}
@@ -91,95 +120,6 @@ body{font-family:'Sarabun',sans-serif;background:#f5f5f0;color:#1a1a1a;min-heigh
 .lightbox{display:none;position:fixed;inset:0;background:rgba(0,0,0,.88);z-index:200;align-items:center;justify-content:center;cursor:pointer}
 .lightbox.open{display:flex}
 .spinner{text-align:center;padding:3rem;color:#aaa;font-size:14px}
-
-/* ===== THE HAVEN | LUXURY HOTEL REDESIGN ===== */
-:root{
-  --lux-ivory:#f7f5ef;--lux-paper:#fffefa;--lux-forest:#174b3b;
-  --lux-forest-2:#0f392d;--lux-gold:#b99a5b;--lux-gold-soft:#e9dfc8;
-  --lux-ink:#26332d;--lux-muted:#7d877f;--lux-line:#e8e3d8;
-  --lux-red:#b85d50;--lux-green:#26785c;--lux-shadow:0 8px 24px rgba(35,48,39,.055)
-}
-html{scroll-behavior:smooth}
-body{background:var(--lux-ivory);color:var(--lux-ink);font-family:'Sarabun',sans-serif;letter-spacing:.05px}
-.topbar{height:68px;padding:0 clamp(16px,3vw,42px);background:rgba(255,254,250,.96);border-bottom:1px solid var(--lux-line);box-shadow:0 2px 12px rgba(30,45,35,.035);gap:15px}
-.topbar>svg{width:25px;height:25px;stroke:var(--lux-gold)!important}
-.topbar h1{font-size:20px;font-weight:600;letter-spacing:.2px;color:var(--lux-forest)}
-.sync-badge{background:#f8f6f0;border:1px solid var(--lux-line);color:#68756c;padding:7px 13px;font-size:12px;border-radius:30px}
-.sync-dot.ok{background:#2e8b68}
-.view-bar{background:var(--lux-paper);border-bottom:1px solid var(--lux-line);position:sticky;top:68px;z-index:9;box-shadow:0 4px 14px rgba(30,45,35,.025)}
-.view-btn{padding:16px 12px;color:#899087;font-size:14px;transition:all .2s}
-.view-btn.active{color:var(--lux-forest);border-bottom:2px solid var(--lux-gold);font-weight:600}
-.content{max-width:1180px;padding:28px clamp(14px,3vw,34px) 56px}
-.bldg-tabs{gap:9px;margin-bottom:20px}
-.btab{padding:8px 19px;border-radius:30px;border:1px solid #ded8ca;background:var(--lux-paper);color:#68736b;font-size:13px;transition:all .18s}
-.btab:hover{border-color:var(--lux-gold);color:var(--lux-forest)}
-.btab.active{background:var(--lux-forest);border-color:var(--lux-forest);color:#fff;box-shadow:0 4px 12px rgba(23,75,59,.16)}
-.summary-row{gap:12px;margin-bottom:18px}
-.scard{background:var(--lux-paper);border:1px solid var(--lux-line);border-radius:14px;padding:15px 17px;box-shadow:var(--lux-shadow);position:relative;overflow:hidden}
-.scard:after{content:"";position:absolute;left:0;top:0;bottom:0;width:3px;background:var(--lux-gold)}
-.scard-label{font-size:12px;color:var(--lux-muted);margin-bottom:5px}
-.scard-val{font-size:25px;font-weight:600;color:var(--lux-ink);line-height:1.2}
-.floor-label{font-size:12px;color:var(--lux-forest);font-weight:600;letter-spacing:.08em;margin:22px 0 10px;display:flex;align-items:center;gap:10px}
-.floor-label:after{content:"";height:1px;background:var(--lux-line);flex:1}
-.rooms-grid{grid-template-columns:repeat(auto-fill,minmax(190px,1fr));gap:11px;margin-bottom:12px}
-.room-card{background:var(--lux-paper);border:1px solid var(--lux-line);border-radius:14px;padding:14px 15px;min-height:116px;box-shadow:0 3px 12px rgba(35,48,39,.025);transition:transform .18s,box-shadow .18s,border-color .18s}
-.room-card:hover{border-color:#c8b487;transform:translateY(-2px);box-shadow:var(--lux-shadow)}
-.room-card.complete{background:#f4faf5;border-color:#b8d4c4}
-.room-card.partial{background:#fffaf0;border-color:#d9b66e}
-.room-num{font-size:17px;font-weight:600;color:var(--lux-forest);margin-bottom:5px}
-.room-card.partial .room-num{color:#93651f}
-.room-card.complete .room-num{color:var(--lux-green)}
-.room-checker,.room-tv{font-size:12px;color:#758078;margin-bottom:5px}
-.dots-row{gap:5px 4px}
-.dot{width:8px;height:8px;border-color:#d8d5cc}
-.dot.ok{background:#31916b;border-color:#31916b}
-.dot.bad{background:#c45d50;border-color:#c45d50}
-.dot-lbl{font-size:11px;color:#879087}
-.tv-sum{background:var(--lux-paper);border:1px solid var(--lux-line);border-left:3px solid var(--lux-gold);border-radius:12px;padding:12px 15px;margin:0 0 20px;color:#69756d;font-size:13px;box-shadow:0 3px 12px rgba(35,48,39,.025)}
-.overlay{background:rgba(18,32,25,.56);backdrop-filter:blur(3px)}
-.modal{background:var(--lux-paper);border:1px solid rgba(185,154,91,.28);border-radius:18px;box-shadow:0 22px 70px rgba(0,0,0,.2);padding:24px;max-width:500px}
-.modal-title{font-size:20px;color:var(--lux-forest);padding-bottom:13px;border-bottom:1px solid var(--lux-line)}
-.form-label{color:#788279;font-size:12px;font-weight:600}
-.form-input,.desc-box{background:#fbfaf6;border:1px solid #e3ded2;border-radius:10px;padding:10px 12px;outline:none}
-.form-input:focus,.desc-box:focus,.filter-sel:focus{border-color:var(--lux-gold);box-shadow:0 0 0 3px rgba(185,154,91,.12)}
-.check-item{padding:13px 0;border-bottom:1px solid #efede6}
-.check-name{color:#34443a;font-weight:600}
-.tbtn,.checker-btn{border:1px solid #e0dbcf;background:#fffefa;color:#69756d;border-radius:9px;padding:7px 12px;transition:all .15s}
-.checker-btn{border-radius:24px}
-.checker-btn.selected{background:var(--lux-forest);border-color:var(--lux-forest);color:white}
-.tbtn.ok-on{background:#edf6f0;color:#216b4f;border-color:#a9cdb7}
-.tbtn.bad-on{background:#fff1ee;color:#a4483d;border-color:#e3b4ac}
-.btn-save{background:var(--lux-forest);border-radius:9px;padding:10px 22px;box-shadow:0 4px 10px rgba(23,75,59,.14)}
-.btn-save:hover{background:var(--lux-forest-2)}
-.btn-cancel{border-radius:9px;background:#fffefa}
-.filter-row{background:var(--lux-paper);border:1px solid var(--lux-line);border-radius:13px;padding:12px;margin-bottom:16px}
-.filter-sel,.btn-sm{border:1px solid #e2ddd1;border-radius:9px;background:#fffefa;padding:7px 10px}
-.hist-card{background:var(--lux-paper);border:1px solid var(--lux-line);border-radius:14px;padding:16px 18px;margin-bottom:11px;box-shadow:0 3px 12px rgba(35,48,39,.025)}
-.hist-room{color:var(--lux-forest);font-size:15px}
-.hist-time,.hist-checker,.hist-note{color:#818a81}
-.htag{border-radius:20px;padding:4px 10px}
-.htag.ok{background:#edf6f0;color:#216b4f}
-.htag.bad{background:#fff1ee;color:#a4483d}
-.empty-msg{color:#8d968d;background:var(--lux-paper);border:1px dashed var(--lux-line);border-radius:14px;padding:42px 16px}
-.spinner{color:#758078}
-@media(min-width:900px){.summary-row{grid-template-columns:repeat(4,minmax(0,1fr))}}
-@media(max-width:600px){
- .topbar{height:60px;padding:0 14px}.topbar h1{font-size:17px}
- .sync-badge{font-size:10px;padding:5px 8px}
- .view-bar{top:60px}.view-btn{font-size:13px;padding:13px 6px}
- .content{padding:18px 12px 36px}
- .bldg-tabs{flex-wrap:nowrap;overflow-x:auto;padding-bottom:5px}
- .btab{white-space:nowrap;padding:7px 14px}
- .summary-row{grid-template-columns:repeat(2,minmax(0,1fr));gap:8px}
- .scard{padding:12px}.scard-val{font-size:22px}
- .rooms-grid{grid-template-columns:repeat(2,minmax(0,1fr));gap:8px}
- .room-card{padding:11px 10px;min-height:108px}
- .room-num{font-size:16px}
- .dot-lbl{font-size:10px}
- .modal{padding:19px 16px;max-height:92vh}
- .filter-row{gap:7px}
-}
-
 </style>
 </head>
 <body>
@@ -194,9 +134,9 @@ body{background:var(--lux-ivory);color:var(--lux-ink);font-family:'Sarabun',sans
 </div>
 <div class="content">
   <div id="view-check">
+    <div id="overall"></div>
     <div class="bldg-tabs" id="bldg-tabs"></div>
-    <div class="summary-row" id="summary-row"></div>
-    <div id="tv-summary"></div>
+    <div id="bldg-sum"></div>
     <div id="rooms-container"><div class="spinner">กำลังโหลด...</div></div>
   </div>
   <div id="view-history" style="display:none">
@@ -265,9 +205,11 @@ const BLDGS = [
   {name:'ตึก 5', floors:[{label:'ชั้น 1',from:5101,to:5116}]}
 ];
 const CHECKS = ['ประตู','ตู้เซฟ','TV','สาย LAN'];
+const STATUS_CHECKS = ['ประตู','ตู้เซฟ','TV']; // สาย LAN เป็นแค่บันทึกว่าทำแล้ว ไม่นับในสถานะห้อง
 const ICONS = {ประตู:'🚪',ตู้เซฟ:'🔒',TV:'📺','สาย LAN':'🔌'};
 
 let activeBldg = 1;
+let flt = 'all';
 let currentView = 'check';
 let modalRoom = null;
 let modalState = {};
@@ -308,65 +250,91 @@ window.setView = function(v){
 
 window.setBldg = function(b){
   activeBldg = parseInt(b);
+  flt = 'all';
   renderRooms();
 };
+window.setFlt = function(f){ flt = f; renderRooms(); };
 
-function getRoomStatus(r){
-  const d = dbData[r];
-  if(!d || !d.checks) return 'none';
-  if(CHECKS.every(c=>d.checks[c]==='ok')) return 'complete';
-  if(Object.values(d.checks).some(v=>v==='ok'||v==='bad')) return 'partial';
-  return 'none';
+// ==DASH-BEGIN==
+const rng=(a,b)=>Array.from({length:b-a+1},(_,i)=>a+i);
+const pct=(a,b)=>b?Math.round(a/b*100):0;
+function roomStat(r){
+  const d=dbData[r]; if(!d||!d.checks) return 'none';
+  const c=d.checks;
+  if(STATUS_CHECKS.some(k=>c[k]==='bad')) return 'bad';
+  if(STATUS_CHECKS.every(k=>c[k]==='ok')) return 'ok';
+  return STATUS_CHECKS.some(k=>c[k]==='ok')?'inc':'none';
+}
+function bldgRooms(b){ return BLDGS[b].floors.flatMap(f=>rng(f.from,f.to)); }
+function sumRooms(list){
+  const s={t:list.length,ok:0,bad:0,inc:0,none:0,cat:{},tv:{m0:0,m1:0,oth:0,none:0},iss:[]};
+  CHECKS.forEach(c=>{ s.cat[c]=0; });
+  list.forEach(r=>{
+    s[roomStat(r)]++;
+    const d=dbData[r]||{}, ck=d.checks||{};
+    CHECKS.forEach(c=>{ if(ck[c]==='bad'){ s.cat[c]++; s.iss.push({r:r,c:c,d:ck[c+'_desc']||'',ts:d.ts||0}); } });
+    const m=d.tvModel;
+    if(!m) s.tv.none++; else if(m===TV_MODELS[0]) s.tv.m0++; else if(m===TV_MODELS[1]) s.tv.m1++; else s.tv.oth++;
+  });
+  s.iss.sort((a,b)=>b.ts-a.ts);
+  return s;
+}
+// ==DASH-END==
+
+const ST_LBL={ok:'✓ ผ่านครบ',bad:'! มีปัญหา',inc:'ตรวจไม่ครบ',none:'ยังไม่ตรวจ'};
+const TV_COL=['#1D9E75','#378ADD','#7F77DD','#B4B2A9'];
+function pbar(s,cls){
+  const w=n=>(s.t?n/s.t*100:0)+'%';
+  return `<div class="pbar${cls||''}"><i style="width:${w(s.ok)};background:#1D9E75"></i><i style="width:${w(s.bad)};background:#EF9F27"></i><i style="width:${w(s.inc)};background:#85B7EB"></i></div>`;
+}
+function metric(label,val,sub,col){
+  return `<div class="metric"><div class="ml"><span class="md" style="background:${col}"></span>${label}</div><div class="mv">${val}</div><div class="ms">${sub}</div></div>`;
+}
+function catCard(s){
+  const mx=Math.max(1,...CHECKS.map(c=>s.cat[c]));
+  return `<div class="card"><div class="lbl">ปัญหาแยกตามรายการ</div>${CHECKS.map(c=>`<div class="srow"><span class="sn">${ICONS[c]} ${c}</span><div class="sbar"><i style="width:${s.cat[c]/mx*100}%"></i></div><b class="sc">${s.cat[c]}</b></div>`).join('')}</div>`;
 }
 
 function renderRooms(){
-  const bldg = BLDGS[activeBldg];
-  if(!bldg) return;
+  const bldg=BLDGS[activeBldg]; if(!bldg) return;
+  const per={}; for(let b=1;b<=5;b++) per[b]=sumRooms(bldgRooms(b));
+  const S=sumRooms([1,2,3,4,5].flatMap(bldgRooms)), chk=S.ok+S.bad+S.inc;
 
-  // Tabs
-  let tabHtml = '';
-  for(let i=1;i<=5;i++){
-    tabHtml += `<button class="btab${i===activeBldg?' active':''}" onclick="setBldg(${i})">${BLDGS[i].name}</button>`;
-  }
-  document.getElementById('bldg-tabs').innerHTML = tabHtml;
+  const legend='<div class="legend"><span><i class="md" style="background:#1D9E75"></i>ผ่านครบ</span><span><i class="md" style="background:#EF9F27"></i>มีปัญหา</span><span><i class="md" style="background:#85B7EB"></i>ตรวจไม่ครบ</span><span><i class="md" style="background:#f0f0ea;border:1px solid #ddd"></i>ยังไม่ตรวจ</span></div>';
+  const bRows=[1,2,3,4,5].map(b=>{const s=per[b];return `<div class="srow pick${b===activeBldg?' on':''}" onclick="setBldg(${b})"><span class="sn">ตึก ${b}</span><div class="sgrow">${pbar(s)}</div><span class="sc">${s.ok+s.bad+s.inc}/${s.t}</span></div>`;}).join('');
+  document.getElementById('overall').innerHTML =
+    `<div class="metrics">${metric('ตรวจแล้ว',chk+' / '+S.t,pct(chk,S.t)+'% ของทั้งหมด','#378ADD')+metric('ผ่านครบ',S.ok,pct(S.ok,S.t)+'% ของทั้งหมด','#1D9E75')+metric('มีปัญหา',S.bad,pct(S.bad,S.t)+'% ของทั้งหมด','#EF9F27')+metric('ยังไม่ตรวจ',S.none,pct(S.none,S.t)+'% ของทั้งหมด','#B4B2A9')}</div>`
+    +`<div class="card"><div class="lbl">ความคืบหน้ารวม</div>${pbar(S,' lg')}${legend}</div>`
+    +`<div class="grid2"><div class="card"><div class="lbl">สรุปตามตึก (กดเลือกตึก)</div>${bRows}</div>${catCard(S)}</div>`;
 
-  // Summary
-  let total=0,done=0,issues=0;
-  bldg.floors.forEach(f=>{for(let r=f.from;r<=f.to;r++){total++;const s=getRoomStatus(r);if(s==='complete')done++;else if(s==='partial')issues++;}});
-  document.getElementById('summary-row').innerHTML=`
-    <div class="scard"><div class="scard-label">ทั้งหมด</div><div class="scard-val">${total}</div></div>
-    <div class="scard"><div class="scard-label">ผ่านครบ</div><div class="scard-val" style="color:#0F6E56">${done}</div></div>
-    <div class="scard"><div class="scard-label">มีปัญหา</div><div class="scard-val" style="color:#A32D2D">${issues}</div></div>
-    <div class="scard"><div class="scard-label">ยังไม่เช็ค</div><div class="scard-val" style="color:#aaa">${total-done-issues}</div></div>`;
+  document.getElementById('bldg-tabs').innerHTML=[1,2,3,4,5].map(b=>`<button class="btab${b===activeBldg?' active':''}" onclick="setBldg(${b})">${BLDGS[b].name}${per[b].bad?`<span class="bd">${per[b].bad}</span>`:''}</button>`).join('');
 
-  // TV model summary
-  const tvCount = {}; let tvNone = 0;
-  bldg.floors.forEach(f=>{for(let r=f.from;r<=f.to;r++){const m=dbData[r]&&dbData[r].tvModel;if(m)tvCount[m]=(tvCount[m]||0)+1;else tvNone++;}});
-  const tvParts = Object.entries(tvCount).map(([m,n])=>`${esc(m)} <b>${n}</b>`);
-  tvParts.push(`ยังไม่ระบุ <b>${tvNone}</b>`);
-  document.getElementById('tv-summary').innerHTML = `<div class="tv-sum">📺 รุ่น TV (${bldg.name}): ${tvParts.join(' · ')}</div>`;
+  const s=per[activeBldg], fl=bldg.floors, c0=s.ok+s.bad+s.inc;
+  const floorRows=fl.map(f=>{const fs=sumRooms(rng(f.from,f.to));return `<div class="srow"><span class="sn">${f.label}</span><div class="sgrow">${pbar(fs)}</div><span class="sc">${fs.ok+fs.bad+fs.inc}/${fs.t}</span></div>`;}).join('');
+  const iss=s.iss.slice(0,6);
+  const issCard=`<div class="card"><div class="lbl">ปัญหาที่ต้องแก้ใน${bldg.name}${s.iss.length>6?` (แสดง 6 จาก ${s.iss.length})`:''}</div>${iss.length?iss.map(x=>`<div class="irow" onclick="openRoom(${x.r})"><b>${x.r}</b><span class="ichip">${ICONS[x.c]} ${x.c}</span><span class="idesc">${esc(x.d)}</span></div>`).join(''):'<div class="mut">ไม่มีปัญหา</div>'}</div>`;
+  const tvv=[s.tv.m0,s.tv.m1,s.tv.oth,s.tv.none], tvn=[TV_MODELS[0],TV_MODELS[1],'อื่นๆ','ยังไม่ระบุ'], tvt=tvv.reduce((a,b)=>a+b,0);
+  const tvCard=`<div class="card"><div class="lbl">รุ่น TV ใน${bldg.name}</div><div class="pbar lg" style="margin-bottom:12px">${tvv.map((v,i)=>`<i style="width:${tvt?v/tvt*100:0}%;background:${TV_COL[i]}"></i>`).join('')}</div>${tvv.map((v,i)=>`<div class="srow"><span class="md" style="background:${TV_COL[i]}"></span><span style="flex:1">${esc(tvn[i])}</span><b class="sc">${v}</b></div>`).join('')}</div>`;
+  document.getElementById('bldg-sum').innerHTML =
+    `<div class="card"><div class="bhead"><div><div class="bt">สรุป${bldg.name}</div><div class="bs">ห้อง ${fl[0].from}–${fl[fl.length-1].to} · ${s.t} ห้อง</div></div><div class="bp"><div class="bpv">${pct(c0,s.t)}%</div><div class="bs">ตรวจแล้ว ${c0} / ${s.t}</div></div></div>${pbar(s,' lg')}</div>`
+    +`<div class="metrics">${metric('ผ่านครบ',s.ok,pct(s.ok,s.t)+'% ของตึก','#1D9E75')+metric('มีปัญหา',s.bad,pct(s.bad,s.t)+'% ของตึก','#EF9F27')+metric('ตรวจไม่ครบ',s.inc,pct(s.inc,s.t)+'% ของตึก','#85B7EB')+metric('ยังไม่ตรวจ',s.none,pct(s.none,s.t)+'% ของตึก','#B4B2A9')}</div>`
+    +`<div class="grid2"><div class="card"><div class="lbl">สรุปรายชั้น</div>${floorRows}</div>${catCard(s)}</div>`
+    +`<div class="grid2">${issCard}${tvCard}</div>`;
 
-  // Rooms
-  let html = '';
-  bldg.floors.forEach(f=>{
-    html += `<div class="floor-label">${f.label}</div><div class="rooms-grid">`;
+  const chips=[['all','ทั้งหมด'],['bad','มีปัญหา'],['ok','ผ่านครบ'],['inc','ตรวจไม่ครบ'],['none','ยังไม่ตรวจ']].map(([k,l])=>`<button class="chip${flt===k?' on':''}" onclick="setFlt('${k}')">${l}</button>`).join('');
+  let rh=`<div class="card"><div class="rhead"><b>ห้องใน${bldg.name}</b><div class="chips">${chips}</div></div>`, shown=0;
+  fl.forEach(f=>{
+    let cards='';
     for(let r=f.from;r<=f.to;r++){
-      const s = getRoomStatus(r);
-      const d = dbData[r];
-      const checker = d&&d.checker?`<div class="room-checker">👤 ${d.checker}</div>`:'';
-      const tvLine = d&&d.tvModel?`<div class="room-tv">📺 ${esc(d.tvModel)}</div>`:'';
-      const dots = CHECKS.map(c=>{
-        const v = d&&d.checks?d.checks[c]:'';
-        return `<span class="dot${v==='ok'?' ok':v==='bad'?' bad':''}"></span><span class="dot-lbl">${c}</span>`;
-      }).join('');
-      html += `<div class="room-card${s==='complete'?' complete':s==='partial'?' partial':''}" onclick="openRoom(${r})">
-        <div class="room-num">${r}</div>${checker}${tvLine}
-        <div class="dots-row">${dots}</div>
-      </div>`;
+      const st=roomStat(r); if(flt!=='all'&&flt!==st) continue;
+      shown++;
+      const d=dbData[r]||{};
+      cards+=`<div class="rc ${st}" onclick="openRoom(${r})"><div class="rc-n">${r}</div><div class="rc-s">${ST_LBL[st]}</div>${d.checker?`<div class="rc-m">👤 ${esc(d.checker)}</div>`:''}${d.tvModel?`<div class="rc-m">📺 ${esc(d.tvModel)}</div>`:''}${d.checks&&d.checks['สาย LAN']==='ok'?'<div class="rc-m">🔌 ทำ LAN แล้ว</div>':''}</div>`;
     }
-    html += '</div>';
+    if(cards) rh+=`<div class="floor-label">${f.label}</div><div class="rooms-grid">${cards}</div>`;
   });
-  document.getElementById('rooms-container').innerHTML = html;
+  if(!shown) rh+='<div class="mut" style="padding:1rem 0">ไม่มีห้องในหมวดนี้</div>';
+  document.getElementById('rooms-container').innerHTML=rh+'</div>';
 }
 
 window.openRoom = function(room){
@@ -425,7 +393,7 @@ function renderModalChecks(){
     const isBad = v==='bad';
     return `<div class="check-item" id="ci-${c}">
       <div class="check-header">
-        <span class="check-name">${ICONS[c]} ${c}</span>
+        <span class="check-name">${ICONS[c]} ${c}${c==='สาย LAN'?'<small style="color:#aaa;font-weight:400;font-size:11px"> บันทึกว่าทำแล้ว · ไม่นับในสถานะ</small>':''}</span>
         <div class="toggle-grp" id="tg-${c}">
           <button class="tbtn${v==='ok'?' ok-on':''}" onclick="setCheck('${c}','ok')">✓ ปกติ</button>
           <button class="tbtn${v==='bad'?' bad-on':''}" onclick="setCheck('${c}','bad')">✕ มีปัญหา</button>
@@ -482,7 +450,7 @@ window.saveRoom = async function(){
   CHECKS.forEach(c=>{entry.media[c]=[...(modalMedia[c]||[])];});
   setSyncStatus('loading');
   await set(ref(db,`hotel_data/${modalRoom}`),entry);
-  const allOk=CHECKS.every(c=>modalState.checks[c]==='ok');
+  const allOk=STATUS_CHECKS.every(c=>modalState.checks[c]==='ok');
   await set(ref(db,`hotel_history/${ts}`),{...entry,room:modalRoom,bldg:String(modalRoom)[0],status:allOk?'complete':'partial'});
   setSyncStatus('ok');
   closeModal();
@@ -500,7 +468,7 @@ function renderHistory(){
   const sf=document.getElementById('hf-status').value;
   let h=dbHistory;
   if(bf)h=h.filter(x=>x.bldg===bf);
-  if(sf)h=h.filter(x=>x.status===sf);
+  if(sf)h=h.filter(x=>statusOf(x)===sf);
   const el=document.getElementById('history-list');
   if(!h.length){el.innerHTML='<div class="empty-msg">ยังไม่มีประวัติการตรวจ</div>';return;}
   el.innerHTML=h.map(entry=>{
@@ -535,7 +503,8 @@ const TH_MONTHS=['ม.ค.','ก.พ.','มี.ค.','เม.ย.','พ.ค.','�
 function monthKeyOf(e){ if(!e||!e.ts) return 0; const d=new Date(e.ts); return d.getFullYear()*100+d.getMonth()+1; }
 function monthLabel(k){ if(!k) return 'ไม่ระบุเดือน'; const y=Math.floor(k/100), m=k%100; return TH_MONTHS[m-1]+' '+(y+543); }
 function roomsOfBldg(b){ return BLDGS[b].floors.reduce((n,f)=>n+(f.to-f.from+1),0); }
-function entryCat(e){ const c=(e&&e.checks)||{}; if(CHECKS.some(k=>c[k]==='bad')) return 'bad'; if(CHECKS.every(k=>c[k]==='ok')) return 'pass'; return 'inc'; }
+function entryCat(e){ const c=(e&&e.checks)||{}; if(STATUS_CHECKS.some(k=>c[k]==='bad')) return 'bad'; if(STATUS_CHECKS.every(k=>c[k]==='ok')) return 'pass'; return 'inc'; }
+function statusOf(e){ return entryCat(e)==='pass'?'complete':'partial'; }
 // นับจากการบันทึกครั้งล่าสุดของแต่ละห้อง
 function tally(entries){
   const latest={};
@@ -625,7 +594,8 @@ function buildReportWorkbook(ExcelJS,all,bf,sf){
   ['หมายเหตุ',
    '• ห้องที่ตรวจ / ผ่านครบ / มีปัญหา / ปัญหาแต่ละรายการ นับจากการบันทึกครั้งล่าสุดของแต่ละห้องในเดือนนั้น',
    '• บันทึก (ครั้ง) = จำนวนครั้งที่กดบันทึกทั้งหมด · ตรวจไม่ครบ = มีรายการที่ยังไม่ได้เลือก และไม่มีรายการมีปัญหา',
-   '• ครอบคลุม = ห้องที่ตรวจ ÷ ห้องทั้งหมด · ภาพรวมล่าสุด = สถานะล่าสุดของทุกห้องจากทุกเดือน'
+   '• ครอบคลุม = ห้องที่ตรวจ ÷ ห้องทั้งหมด · ภาพรวมล่าสุด = สถานะล่าสุดของทุกห้องจากทุกเดือน',
+   '• สถานะห้อง (ผ่านครบ/มีปัญหา) นับจาก ประตู ตู้เซฟ TV เท่านั้น · สาย LAN เป็นแค่บันทึกว่าทำแล้ว'
   ].forEach((t,i)=>{
     s1.mergeCells(r,1,r,12);
     const c=s1.getCell(r,1); c.value=t;
@@ -660,7 +630,7 @@ function buildReportWorkbook(ExcelJS,all,bf,sf){
   });
 
   // ---------- Sheet 3: ประวัติทั้งหมด ----------
-  const detail=sf?scope.filter(x=>x.status===sf):scope;
+  const detail=sf?scope.filter(x=>statusOf(x)===sf):scope;
   const s3=xSheet(wb,'ประวัติทั้งหมด');
   [12,17,8,8,14,10,24,10,24,10,24,20,10,24,26,13].forEach((w,i)=>{ s3.getColumn(i+1).width=w; });
   xTitle(s3,'ประวัติการตรวจห้องพักทั้งหมด','ออกรายงาน '+today+' · ขอบเขต: '+scopeLabel+(sf?' · สถานะ: '+(sf==='complete'?'ผ่านครบ':'มีปัญหา'):'')+' · '+detail.length+' รายการ',16);
