@@ -70,6 +70,7 @@ b.sc{font-size:13px;color:#1a1a1a;font-weight:600}
 .rc.ok{background:#f0faf6;border-color:#5DCAA5}.rc.ok .rc-n,.rc.ok .rc-s{color:#0F6E56}
 .rc.bad{background:#fffbf0;border-color:#FAC775}.rc.bad .rc-n,.rc.bad .rc-s{color:#854F0B}
 .rc.inc{background:#f3f8fd;border-color:#B5D4F4}.rc.inc .rc-n,.rc.inc .rc-s{color:#185FA5}
+.rc-t{font-size:11px;color:#aaa;margin-top:2px}
 .rc-m{font-size:11px;color:#888;margin-top:2px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
 .overlay{display:none;position:fixed;inset:0;background:rgba(0,0,0,.45);z-index:100;align-items:flex-end;justify-content:center}
 .overlay.open{display:flex}
@@ -265,6 +266,7 @@ function roomStat(r){
   if(STATUS_CHECKS.every(k=>c[k]==='ok')) return 'ok';
   return STATUS_CHECKS.some(k=>c[k]==='ok')?'inc':'none';
 }
+function fmtDate(ts){ return ts?new Date(ts).toLocaleDateString('th-TH',{day:'numeric',month:'short',year:'2-digit'}):''; }
 function bldgRooms(b){ return BLDGS[b].floors.flatMap(f=>rng(f.from,f.to)); }
 function sumRooms(list){
   const s={t:list.length,ok:0,bad:0,inc:0,none:0,cat:{},tv:{m0:0,m1:0,oth:0,none:0},iss:[]};
@@ -329,7 +331,7 @@ function renderRooms(){
       const st=roomStat(r); if(flt!=='all'&&flt!==st) continue;
       shown++;
       const d=dbData[r]||{};
-      cards+=`<div class="rc ${st}" onclick="openRoom(${r})"><div class="rc-n">${r}</div><div class="rc-s">${ST_LBL[st]}</div>${d.checker?`<div class="rc-m">👤 ${esc(d.checker)}</div>`:''}${d.tvModel?`<div class="rc-m">📺 ${esc(d.tvModel)}</div>`:''}${d.checks&&d.checks['สาย LAN']==='ok'?'<div class="rc-m">🔌 ทำ LAN แล้ว</div>':''}</div>`;
+      cards+=`<div class="rc ${st}" onclick="openRoom(${r})"><div class="rc-n">${r}</div><div class="rc-s">${ST_LBL[st]}</div>${d.ts?`<div class="rc-t">🕒 ${fmtDate(d.ts)}</div>`:''}${d.checker?`<div class="rc-m">👤 ${esc(d.checker)}</div>`:''}${d.tvModel?`<div class="rc-m">📺 ${esc(d.tvModel)}</div>`:''}${d.checks&&d.checks['สาย LAN']==='ok'?'<div class="rc-m">🔌 ทำ LAN แล้ว</div>':''}</div>`;
     }
     if(cards) rh+=`<div class="floor-label">${f.label}</div><div class="rooms-grid">${cards}</div>`;
   });
